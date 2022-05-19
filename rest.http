@@ -1,0 +1,24 @@
+POST http://localhost:3001/v1/user
+Content-Type: application/json
+
+{
+    "name":"Krishna",
+    "company":"Indian Bank",
+    "address":"abcjsdncjsdncj",
+    "phone":"0789654123",
+    "email": "kgf@hb.com",
+     "password": "uhjhnj@123"
+   
+}
+
+
+### User Sign in endpoint
+
+POST http://localhost:3001/v1/user/login
+Content-Type: application/json
+
+{
+    "email": "kgf@hb.com",
+    "password": "uhjhnj@123"
+   
+}
