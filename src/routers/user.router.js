@@ -2,6 +2,7 @@ import express from "express";
 // import { get } from "express/lib/response";
 // import { json } from "express/lib/response.js";
 import { hashPassword, comparePassword } from "../helpers/bcrypt.helper.js";
+import { createAccessJWT, createRefreshJWT } from "../helpers/jwt.helper.js";
 import {insertUser, getUserByEmail} from "../model/user/user.model.js";
 const router = express.Router();
 
@@ -58,11 +59,25 @@ router.post("/login", async (req,res) =>{
 
     if(!passFromDb) return res.json({status:"error", message: "Invalid form submission"}) 
     // console.log(passFromDb);
+
+    
+
     const result = await comparePassword(password,passFromDb)
-    console.log(result);
+    
+    if(!result){
+        return res.json({status:"error", message: "Invalid form submission"}) 
+        
+    }
 
+    const accessJWT = await createAccessJWT(user.email);
+    const refreshJWT = await createRefreshJWT(user.email);
 
-    res.json({status:"success", message: "Login Successful"})
+    res.json({
+         status:"success",
+         message: "Login Successful", 
+         accessJWT,
+         refreshJWT
+        })
 })
 
 export {router as userRouter};
