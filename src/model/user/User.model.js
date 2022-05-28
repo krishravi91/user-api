@@ -32,4 +32,26 @@ const getUserByEmail = email => {
 
 }
 
-export {insertUser, getUserByEmail};
+const storeUserRefreshJWT = (_id, token) => {
+    return new Promise((resolve, reject) => {
+      try {
+        uSchema.findOneAndUpdate(
+          { _id },
+          {
+            $set: { "refreshJWT.token": token, "refreshJWT.addedAt": Date.now() },
+          },
+          { new: true }
+        )
+          .then((data) => resolve(data))
+          .catch((error) => {
+            console.log(error);
+            reject(error);
+          });
+      } catch (error) {
+        console.log(error);
+        reject(error);
+      }
+    });
+  };
+
+export {insertUser, getUserByEmail, storeUserRefreshJWT};

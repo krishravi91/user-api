@@ -12,10 +12,10 @@ router.post('/', async(req,res)=>{
 
     try{
         const {subject, sender, message} = req.body;
-    // console.log(req.body);
+    const userId= req.userId;
 
     const ticketObj = {
-        clientId:"6280c908981d0829e052d48f",
+        clientId: userId,
         subject,
         conversations:[
             {
@@ -26,7 +26,7 @@ router.post('/', async(req,res)=>{
     }
 
     const result = await insertTicket(ticketObj);
-    // console.log(result)
+    console.log(result)
     if(result._id){
         return res.json({status:'success', message:"new ticket created successfully"})
     }

@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const TicketSchema = new Schema({
-  clientID: {
-      type: Schema.Types.ObjectId
+  clientId: {
+    type: Schema.Types.ObjectId,
   },
   
   subject: {

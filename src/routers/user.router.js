@@ -1,10 +1,11 @@
 import express from "express";
+const router = express.Router();
 // import { get } from "express/lib/response";
 // import { json } from "express/lib/response.js";
 import { hashPassword, comparePassword } from "../helpers/bcrypt.helper.js";
-import { createAccessJWT, createRefreshJWT } from "../helpers/jwt.helper.js";
+import generateToken  from "../helpers/jwt.helper.js";
 import {insertUser, getUserByEmail} from "../model/user/user.model.js";
-const router = express.Router();
+
 
 router.all('/',(req,res, next)=>{
     // console.log(name);
@@ -56,21 +57,22 @@ router.post("/login", async (req,res) =>{
     const user = await getUserByEmail(email);
     // console.log(user);
     const passFromDb = user && user._id ? user.password :null
-
-    if(!passFromDb) return res.json({status:"error", message: "Invalid form submission"}) 
     // console.log(passFromDb);
 
-    
+    if(!passFromDb) return res.json({status:"error", message: "Invalid form submission wrong password"}) 
+    // console.log(passFromDb);
+
 
     const result = await comparePassword(password,passFromDb)
+     console.log(result)
     
     if(!result){
-        return res.json({status:"error", message: "Invalid form submission"}) 
+        return res.json({status:"error", message: "Invalid form submission result"}) 
         
     }
 
-    const accessJWT = await createAccessJWT(user.email);
-    const refreshJWT = await createRefreshJWT(user.email);
+    const {accessJWT, refreshJWT} = await generateToken(user.email, user._id);
+    // const refreshJWT = await createRefreshJWT(user.email);
 
     res.json({
          status:"success",
